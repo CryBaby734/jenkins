@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blogcenter-service
+spec:
+  selector:
+    app: blogcenter
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP  # Это по умолчанию, если нужно внешнее подключение можно изменить на LoadBalancer

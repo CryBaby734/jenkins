@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blogcenter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blogcenter
+  template:
+    metadata:
+      labels:
+        app: blogcenter
+    spec:
+      containers:
+        - name: blogcenter
+          image: crybaby734/blogcenter:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: blogcenter-config
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: blogcenter-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blogcenter-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+      imagePullSecrets:
+        - name: regcred
