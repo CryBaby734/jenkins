@@ -4,24 +4,25 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker-compose build'
+                sh '/usr/local/bin/docker-compose build'
             }
         }
         stage('Test') {
             steps {
-                sh 'docker-compose exec app ./run_tests.sh'
+                sh '/usr/local/bin/docker-compose exec app ./run_tests.sh'
             }
         }
         stage('Deploy') {
             steps {
-                sh 'docker-compose up -d'
+                sh '/usr/local/bin/docker-compose up -d'
             }
         }
     }
 
     post {
         always {
-            sh 'docker-compose down'
+            sh '/usr/local/bin/docker-compose down'
         }
     }
 }
+
