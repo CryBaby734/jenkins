@@ -4,25 +4,24 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh '/usr/local/bin/docker-compose build'
+                script {
+                    sh './gradlew build' // Сборка проекта
+                }
             }
         }
-        stage('Test') {
+        stage('Docker Build') {
             steps {
-                sh '/usr/local/bin/docker-compose exec app ./run_tests.sh'
+                script {
+                    sh 'docker build -t blogcenter-app:latest .'
+                }
             }
         }
-        stage('Deploy') {
+        stage('Docker Run') {
             steps {
-                sh '/usr/local/bin/docker-compose up -d'
+                script {
+                    sh 'docker run -d -p 8080:8080 blogcenter-app:latest'
+                }
             }
-        }
-    }
-
-    post {
-        always {
-            sh '/usr/local/bin/docker-compose down'
         }
     }
 }
-
