@@ -1,25 +1,31 @@
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
                 script {
-                    sh './gradlew build' // Сборка проекта
+                    sh './gradlew clean build'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    sh './gradlew test'
                 }
             }
         }
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'docker build -t blogcenter-app:latest .'
+                    sh 'docker-compose build'
                 }
             }
         }
-        stage('Docker Run') {
+        stage('Docker Compose Up') {
             steps {
                 script {
-                    sh 'docker run -d -p 8080:8080 blogcenter-app:latest'
+                    sh 'docker-compose up -d'
                 }
             }
         }
